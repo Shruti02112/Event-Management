@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Registration System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            display: flex;
+            align-items: flex-start;
+            background-color: #2c3e50;
+            padding: 15px 20px;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        .navbar h2 {
+            color: #ffffff;
+            margin: 0;
+            flex: 1;
+            font-size: 24px;
+        }
+        .navbar a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 17px;
+            padding: 10px 15px;
+            border-radius: 4px;
+        }
+        .navbar a:hover {
+            background-color: #34495e;
+        }
+        .container {
+            max-width: 1300px;
+            margin: auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 40px; /* Adjusted for fixed navbar */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h3 {
+            border-bottom: 2px solid #2980b9;
+            padding-bottom: 5px;
+            color: #2980b9;
+            font-size: 20px;
+        }
+        h2 {
+            padding-bottom: 5px;
+            color: #2980b9;
+            font-size: 25px;
+        }
+        h6 {
+            margin-left: 10px;
+            margin-right: 10px;
+            color: #2980b9;
+            font-size: 13px;
+        }
+        
+        p{
+            padding-bottom: 1px;
+            color: #2c3e50;
+            font-size: 25px;
+            text-align: center;
+            margin-top: 90px;
+        }
+        .event-row {
+            display: flex;
+            flex-wrap: wrap; 
+            justify-content: space-between; /* Distributes space between items */
+            margin: 20px 0; 
+        }
+        .event-container {
+            flex: 0 1 calc(33.333% - 20px); /* Ensure three items per row */
+            margin: 10px; 
+            padding: 15px; 
+            border: 1px solid #ddd; 
+            border-radius: 10px;
+            background-color: #ecf0f1; 
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+            box-sizing: border-box; /* Include padding and border in width */
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+            font-size: 15px;
+        }
+        th {
+            background-color: #2980b9;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        tr:hover {
+            background-color: #dfe6e9;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .modal-content {
+            background-color: #ffffff;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 400px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .register-button {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #2980b9;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+        .register-button:hover {
+            background-color: #3498db;
+        }
+        input[type="text"], input[type="email"] {
+            width: 90%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin: 10px;
+        }
+        .image-section {
+            max-width: 100%;
+            margin: 30px auto 20px;
+            text-align: center;
+        }
+        .responsive-image {
+            max-width: 90%;
+            height: auto;
+            max-height: 500px;
+            border-radius: 10px;
+        }
+        .slider {
+            position: relative;
+            max-width: 100%;
+            margin: auto;
+            overflow: hidden;
+        }
+        .slides {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+        .slide {
+            min-width: 100%;
+            box-sizing: border-box;
+        }
+        .prev, .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            padding: 16px;
+            color: white;
+            font-weight: bold;
+            font-size: 24px;
+            transition: background-color 0.6s ease;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, 0.5);
+            transform: translateY(-50%);
+            z-index: 10;
+        }
+        .prev {
+            left: 10px;
+        }
+        .next {
+            right: 10px;
+        }
+        .prev:hover, .next:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h2>EVENTIA</h2>
+        <div>
+            
+            <a href="{{ url_for('login') }}">Event Registration</a>
+            <a href="{{ url_for('log') }}">Event Management</a>
+	    <a> </a>
+        </div>
+    </div>
+    <div>
+	<p><i>Bringing Events Closer to You!</i></p>
+    </div>
+    
+    <section class="image-section">
+        <div class="slider">
+            <div class="slides">
+                <div class="slide fade" style="display: none;">
+                    <img src="{{ url_for('static', filename='images/w1.png') }}" alt="Image 1" class="responsive-image">
+                </div>
+                <div class="slide fade" style="display: none;">
+                    <img src="{{ url_for('static', filename='images/w2.png') }}" alt="Image 2" class="responsive-image">
+                </div>
+                <div class="slide fade" style="display: block;">
+                    <img src="{{ url_for('static', filename='images/w3.png') }}" alt="Image 3" class="responsive-image">
+                </div>
+            </div>
+            <a class="prev" onclick="changeSlide(-1)">❮</a>
+            <a class="next" onclick="changeSlide(1)">❯</a>
+        </div>
+    </section>
+
+    <main>
+        <div class="container">
+            <section id="event-list">
+                <h2><center>Event List</center></h2>
+                <div class="event-row"> 
+                    {% for event in events %}
+                    <div class="event-container">
+                        <h3>{{ event.eve_name }}</h3>
+                        <table>
+                            <tbody>
+                                <tr><td>Date:</td><td>{{ event.eve_date }}</td></tr>
+                                <tr><td>Location:</td><td>{{ event.loc }}</td></tr>
+                                <tr><td>Time:</td><td>{{ event.time }}</td></tr>
+                                <tr><td>Description:</td><td>{{ event.des }}</td></tr>
+                                <tr><td>Event ID:</td><td>{{ event.event_id }}</td></tr>
+                                <tr>
+                                    <td colspan="2" style="text-align: center;">
+                                        <a href="javascript:void(0)" class="register-button" 
+                                        data-event="{{ event.eve_name }}" 
+                                        data-event-location="{{ event.loc }}" 
+                                        data-event-time="{{ event.time }}">
+                                        Register
+                                     </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    {% endfor %}
+                </div> 
+                
+                <div class="modal" id="registrationModal">
+                    <div class="modal-content">
+                        <span class="close" onclick="closeModal()">×</span>
+                        <h2>Register for <span id="event-name"></span></h2>
+                        
+                            <h6>Location: <span id="event-location"></span> | <span> </span>Time: <span id="event-time"></span></h6> 
+                        
+                        <label for="event-id" class="form-label">Event ID:</label><br>
+                        <input type="text" id="event-id" placeholder="Event ID" required=""><br>
+                        <label for="name" class="form-label">Name:</label><br>
+                        <input type="text" id="name" placeholder="Your Name" required=""><br>
+                        <label for="email" class="form-label">Email:</label><br>
+                        <input type="email" id="email" placeholder="Your Email" required=""><br>
+                        <center><button onclick="submitRegistration()" class="register-button">Submit</button></center>
+                    </div>
+                </div>
+                
+                </div>
+                
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        let slideIndex = 0;
+        showSlides();
+
+        function showSlides() {
+            const slides = document.getElementsByClassName("slide");
+            for (let i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";  
+            }
+            slideIndex++;
+            if (slideIndex > slides.length) {slideIndex = 1}    
+            slides[slideIndex - 1].style.display = "block";  
+            setTimeout(showSlides, 10000);
+        }
+
+        function changeSlide(n) {
+            slideIndex += n;
+            const slides = document.getElementsByClassName("slide");
+            if (slideIndex > slides.length) {slideIndex = 1}
+            if (slideIndex < 1) {slideIndex = slides.length}
+            for (let i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";  
+            }
+            slides[slideIndex - 1].style.display = "block";  
+        }
+
+        document.querySelectorAll('.register-button').forEach(button => {
+    button.addEventListener('click', function() {
+        const eventName = this.getAttribute('data-event');
+        const eventLocation = this.getAttribute('data-event-location'); 
+        const eventTime = this.getAttribute('data-event-time'); 
+        
+        // Set the event details in the modal
+        document.getElementById('event-name').innerText = eventName;
+        document.getElementById('event-location').innerText = eventLocation; 
+        document.getElementById('event-time').innerText = eventTime; 
+        
+        document.getElementById('registrationModal').style.display = "block";
+    });
+});
+
+        function submitRegistration() {
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const eventId = document.getElementById('event-id').value.trim();
+
+    if (name && email && eventId) {
+        const formData = {
+            name: name,
+            email: email,
+            event_id: eventId
+        };
+
+        fetch('/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: Object.keys(formData).map(key => `${key}=${formData[key]}`).join('&')
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.text(); // Expecting text response
+        })
+        .then(data => {
+            alert(data); // Show success message
+
+            // Redirect to the tickets page or wherever you need
+            window.location.href = '/tickets'; // Change to your desired URL
+        })
+        .catch(error => {
+            alert('Error registering: ' + error.message);
+        });
+    } else {
+        alert('Please fill in all fields.');
+    }
+}
+
+function closeModal() {
+    document.getElementById('registrationModal').style.display = "none";
+};
+    </script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Ticket</title>
+    <style>
+      body {
+          font-family: Arial, sans-serif;
+          background-color: #f5f5f5;
+          margin: 0;
+          padding: 0;
+      }
+      .navbar {
+          display: flex;
+          align-items: center;
+          background-color: #2c3e50;
+          padding: 15px 20px;
+          position: fixed;
+          top: 0;
+          width: 100%;
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+      }
+      
+      .navbar h2 {
+          color: #ffffff;
+          margin: 0;
+          flex: 1;
+          font-size: 24px;
+      }
+      .navbar a {
+          color: #ffffff;
+          text-decoration: none;
+          font-size: 17px;
+          padding: 10px 15px;
+          border-radius: 4px;
+      }
+      .navbar a:hover {
+          background-color: #34495e;
+      }
+      .container {
+          max-width: 700px;
+          margin: auto;
+          background: #ffffff;
+          padding: 20px;
+          border-radius: 10px;
+          margin-top: 40px; 
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+      h2 {
+          color: #2980b9;
+          text-align: left;
+      }
+      h6 {
+          padding-bottom: 1px;
+          color: #2c3e50;
+          font-size: 25px;
+          text-align: center;
+          margin-top: 90px;
+      }
+      .event-container {
+          padding: 20px;
+          border: 2px solid #ddd;
+          border-radius: 10px;
+          background-color: #ecf0f1;
+          box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+          margin-top: 20px;
+      }
+      p {
+          color: #2c3e50;
+          font-size: 20px;
+          margin: 10px 0; /* Adjusted margin for better spacing */
+      }
+      h4 {
+          text-align: center;
+          margin-top: 20px;
+          color: #2980b9; /* Retaining the original color for consistency */
+      }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <h2>EVENTIA</h2>
+        <div>
+            <a href="{{ url_for('homepg') }}">Home</a>
+            <a href="{{ url_for('login') }}">Event Registration</a>
+            <a href="{{ url_for('log') }}">Event Management</a>
+            <a></a>
+        </div>
+    </div>
+
+    <div>
+        <h6><i>Bringing Events Closer to You!</i></h6>
+    </div>
+
+    <div class="container">
+        <h2>Ticket</h2>
+        <div class="event-container">
+            <p><strong>Name:</strong> {{ registration[0] }}</p>
+            <p><strong>Event Name:</strong> {{ registration[2] }}</p>
+            <p><strong>Date:</strong> {{ registration[3] }}</p>
+            <p><strong>Location:</strong> {{ registration[4] }}</p>
+            <p><strong>Time:</strong> {{ registration[5] }}</p>
+        </div>
+        <h4>Please Take a Screenshot!</h4>
+    </div>
+</body>
+</html>
